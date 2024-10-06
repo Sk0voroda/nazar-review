@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { parse } from 'papaparse';
 
+// table is bad name
 function Table() {
   const [records, setRecords] = useState([]);
   const [file, setFile] = useState(null);
@@ -11,8 +12,10 @@ function Table() {
     );
   });
 
+  // dont add such comments its bad and unnessesary
   //Pagination variables
   const [currentPage, setCurrentPage] = useState(1);
+  // you can move recordsPerPage out of component 
   const recordsPerPage = 10;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
@@ -20,16 +23,21 @@ function Table() {
   const amountOfPages = Math.ceil(records.length / recordsPerPage);
   const numbers = [...Array(amountOfPages + 1).keys()].slice(1);
 
+  // remove
   console.log(search)
 
 
+  // use 2 variables
   const [sorting, setSorting] = useState({ field: 'name', ascending: false })
+
   function applySorting(key) {
     setSorting((prevState) => ({
       key,
       ascending: prevState.key === key ? !prevState.ascending : true, // Toggle ascending/descending if same column
     }));
   }
+
+  // dont add such comments its bad and unnessesary
   //Sorting
   useEffect(() => {
     if (sorting.key) {
@@ -42,18 +50,25 @@ function Table() {
     }
   }, [sorting]);
 
+  // dont add such comments its bad and unnessesary
   //Fetching data from API
   useEffect(() => {
     const fetchData = async () => {
+      // add try catch error handling
+      // MOVE THIS https://localhost:7021 to .env variable!!!!!
       const result = await fetch('https://localhost:7021/test/Employee');
+      // add check if result is ok
       const json = await result.json();
       setRecords(json);
     };
     fetchData();
   }, []);
+
+  // dont add such comments its bad and unnessesary
   // Delete record by ID from my API
   const handleDelete = async (id) => {
     try {
+      // MOVE THIS https://localhost:7021 to .env variable!!!!!
       const response = await fetch(`https://localhost:7021/test/Employee/${id}`, {
         method: 'DELETE',
       });
@@ -69,10 +84,17 @@ function Table() {
       alert('An error occurred while deleting the record.');
     }
   };
+
+  // dont add such comments its bad and unnessesary
   //Loading CSV file
   const handleFileChange = (e) => {
+    // add file size and format validation
+    // html format validation is not working everywhere properly
+    // and check if files[0] not empty
     setFile(e.target.files[0]);
   };
+
+  // dont add such comments its bad and unnessesary
   //Uploading CSV file to my db using my API
   const handleUpload = async () => {
     if (!file) {
@@ -123,6 +145,7 @@ function Table() {
         return result;
     });
     
+    // remove
     console.log('Final JSON:', json);
   
       try {
@@ -178,6 +201,7 @@ function Table() {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+              {/* why you pass 2 params to applySorting ??? */}
               <th scope="col" className="px-6 py-3" onClick={() => applySorting('id', !sorting.ascending)}>Id</th>
               <th scope="col" className="px-6 py-3" onClick={() => applySorting('name', !sorting.ascending)}>Name</th>
               <th scope="col" className="px-6 py-3" onClick={() => applySorting('birthDate', !sorting.ascending)}>Birth Date</th>
@@ -187,6 +211,7 @@ function Table() {
             </tr>
           </thead>
           <tbody>
+            {/* check if resultRecords is not empty */}
             {resultRecords.map((record) => (
               <tr key={record.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <td className="px-6 py-4">{record.id}</td>
@@ -227,6 +252,7 @@ function Table() {
       </div>
     </>
   );
+  // wtf is thiss????
   function nextPage(){
     if(currentPage !== amountOfPages){
       setCurrentPage(currentPage +1);
